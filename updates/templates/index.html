@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                    {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if user.is_authenticated %}
+    {% for manga in manga_series %}
+    <form method="post">
+      {% csrf_token %}
+      <article class="content-section">
+        <div class="row">
+          <div class="col col-md-3 text-center justify-content-center align-self-center">
+            <img class="img-thumbnail center-block" src="{{manga.image.url}}">
+          </div>
+          <div class="col">
+
+            <div class="row">
+              <div class="col-md-11">
+                  <h4 class="mt-0"><strong>{{ manga.name }}</strong></h4>
+              </div>
+              {% if manga.paused == True %}
+              <div class="col-md-1">
+                <i class="fa fa-pause" aria-hidden="true"></i>
+              </div>
+              {% endif %}
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>Latest Chapter:</strong> {{ manga.latest_chapter }}</li>
+              <li class="list-group-item"><strong>Updated Locally:</strong> {{ manga.last_updated }}</li>
+              <li class="list-group-item"><strong>Manga Page:</strong> <a href="{{ manga.manga_URL }}" target="_blank">{{ manga.name }}</a> </li>
+              <li class="list-group-item">
+                <div class="float-left">
+                  {% if manga.paused == True %}
+                  <button type="submit" class="btn btn-outline-dark btn-sm py-0" name="unpause" value="{{ manga.pk }}">Unpause</button>
+                  {% else %}
+                  <button type="submit" class="btn btn-outline-dark btn-sm py-0" name="pause" value="{{ manga.pk }}">Pause</button>
+                  {% endif %}
+                  <button type="submit" class="btn btn-outline-danger btn-sm py-0" name="delete" value="{{ manga.pk }}">Delete</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </article>
+      </form>
+    {% endfor %}
+    {% else %}
+    <article class="content-section">
+      <div class="row">
+        <div class="col col-md-3 text-center justify-content-center align-self-center">
+          <img class="img-thumbnail center-block" src="#">
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col-md-11">
+                <h4 class="mt-0"><strong>Example Manga 1</strong></h4>
+            </div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Latest Chapter:</strong> Chapter #</li>
+            <li class="list-group-item"><strong>Updated Locally:</strong> Date - Time</li>
+            <li class="list-group-item"><strong>Manga Page:</strong> <a href="#" target="_blank">Link to example manga 1 page</a> </li>
+            <li class="list-group-item">
+              <div class="float-left">
+                <button type="submit" class="btn btn-outline-dark btn-sm py-0" name="pause" value="{{ manga.pk }}">Pause</button>
+                <button type="submit" class="btn btn-outline-danger btn-sm py-0" name="delete" value="{{ manga.pk }}">Delete</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="content-section">
+      <div class="row">
+        <div class="col col-md-3 text-center justify-content-center align-self-center">
+          <img class="img-thumbnail center-block" src="#">
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col-md-11">
+                <h4 class="mt-0"><strong>Example Manga 2</strong></h4>
+            </div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Latest Chapter:</strong> Chapter #</li>
+            <li class="list-group-item"><strong>Updated Locally:</strong> Date - Time</li>
+            <li class="list-group-item"><strong>Manga Page:</strong> <a href="#" target="_blank">Link to example manga 2 page</a> </li>
+            <li class="list-group-item">
+              <div class="float-left">
+                <button type="submit" class="btn btn-outline-dark btn-sm py-0" name="pause" value="{{ manga.pk }}">Pause</button>
+                <button type="submit" class="btn btn-outline-danger btn-sm py-0" name="delete" value="{{ manga.pk }}">Delete</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </article>
+    {% endif %}
+{% endblock content %}

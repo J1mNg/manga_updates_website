@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block javascript%}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('#MyButton').click(function() {
+          $('#loading').html("<i>Please wait while loading...</i>");
+      });
+  });
+</script>
+
+{% endblock javascript %}
+
+{% block content %}
+
+<article class="content-section">
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" name="update_now" class="btn btn-outline-info btn-lg btn-block" id="MyButton">Update</button>
+    </form>
+</article>
+
+<div id="loading"></div>
+
+{% endblock content %}

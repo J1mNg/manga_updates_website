@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% load updatetags %}
+
+{% block javascript%}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  $(document).ready(function() {
+      var i = 0;
+      var linksArray ={{ all_updated|safe }};
+      $('#MyButton').click(function() {
+        window.open(linksArray[i].url,'_blank');
+        $("#reading").html("<strong>Reading: </strong> " + linksArray[i].name);
+        if(i == (linksArray.length - 1)){
+          $("#next").html("<strong>Next: </strong> <span style='color:red;'>All updated manga has been read</span>");
+        } else {
+          $("#next").html("<strong>Next: </strong>" + linksArray[i+1].name);
+        }
+        i += 1;
+      });
+  });
+</script>
+
+{% endblock javascript %}
+
+{% block content %}
+
+{% if new_manga_flag %}
+<article class="content-section">
+  <div class="row">
+    <div class="col col-md-3 text-center justify-content-center align-self-center">
+      <input type="button" value="Next Manga" class="btn btn-outline-info" id="MyButton" >
+    </div>
+
+    <div class="col">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" id="reading"><strong>Reading:</strong></li>
+            <li class="list-group-item" id="next"><strong>Next:</strong></li>
+          </ul>
+    </div>
+  </div>
+</article>
+
+
+{% for dict in display_list %}
+    <article class="content-section">
+      <div class="row">
+        <div class="col col-md-3 text-center justify-content-center align-self-center">
+          <img class="img-thumbnail center-block" src="{{ dict.manga.image.url}}">
+        </div>
+
+        <div class="col">
+            <div class="col-md-11">
+                <h4 class="mt-0"><strong>{{ dict.manga.name }}</strong></h4>
+            </div>
+
+            {% for item in dict.update_list %}
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>{{ forloop.counter }}: </strong><a href="{{ item }}" target="_blank"> Chapter {{ item|return_chapter_num }}</a></li>
+              </ul>
+            {% endfor %}
+        </div>
+      </div>
+    </article>
+{% endfor %}
+
+{% else %}
+
+<div class="alert alert-info" role="alert">
+  No new manga!
+</div>
+
+{% endif %}
+
+{% endblock content %}
